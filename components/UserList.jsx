@@ -30,7 +30,7 @@ const UserList = () => {
     <div className="container mx-auto my-8">
       <div className="flex shadow border-b">
         <table className="min-w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-slate-300">
             <tr>
               <th className="text-left font-medium text-gray-500 uppercase tracking-wide py-3 px-6">
                 First Name
