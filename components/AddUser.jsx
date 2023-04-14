@@ -1,8 +1,22 @@
 import { Dialog, Transition } from "@headlessui/react"
 import React, { Fragment, useState } from "react"
+import UserList from "./UserList"
 
 const AddUser = () => {
+  const USER_API_BASE_URL = "http://localhost:8080/api/v1/users"
   const [isOpen, setIsOpen] = useState(false)
+  const [user, setUser] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    emailId: "",
+  })
+  const [responseUser, setResponseUser] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    emailId: "",
+  })
 
   const closeModal = () => {
     setIsOpen(false)
@@ -10,6 +24,40 @@ const AddUser = () => {
 
   const openModal = () => {
     setIsOpen(true)
+  }
+
+  const handleChange = (event) => {
+    const value = event.target.value
+    setUser({ ...user, [event.target.name]: value })
+  }
+
+  const saveUser = async (e) => {
+    e.preventDefault()
+
+    const response = await fetch(USER_API_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+    if (!response.ok) {
+      throw new Error("Something went wrong")
+    }
+
+    const _user = await response.json()
+    setResponseUser(_user)
+    reset()
+  }
+
+  const reset = () => {
+    setUser({
+      id: "",
+      firstName: "",
+      lastName: "",
+      emailId: "",
+    })
+    setIsOpen(false)
   }
 
   return (
@@ -56,6 +104,8 @@ const AddUser = () => {
                       <input
                         type="text"
                         name="firstName"
+                        value={user.firsName}
+                        onChange={(e) => handleChange(e)}
                         className="h-10 w-96 border mt-2 px-2 py-2"
                       />
                     </div>
@@ -66,6 +116,8 @@ const AddUser = () => {
                       <input
                         type="text"
                         name="lastName"
+                        value={user.lastName}
+                        onChange={(e) => handleChange(e)}
                         className="h-10 w-96 border mt-2 px-2 py-2"
                       />
                     </div>
@@ -76,15 +128,20 @@ const AddUser = () => {
                       <input
                         type="text"
                         name="emailId"
+                        value={user.emailId}
+                        onChange={(e) => handleChange(e)}
                         className="h-10 w-96 border mt-2 px-2 py-2"
                       />
                     </div>
                     <div className="h-14 my-4 space-x-4 pt-4">
-                      <button className="rounded text-white font-semibold bg-blue-500 hover:bg-blue-700 hover:cursor-pointer py-2 px-6 ">
+                      <button
+                        onClick={saveUser}
+                        className="rounded text-white font-semibold bg-blue-500 hover:bg-blue-700 hover:cursor-pointer py-2 px-6 "
+                      >
                         Save
                       </button>
                       <button
-                        onClick={closeModal}
+                        onClick={reset}
                         className="rounded text-white font-semibold bg-red-500 hover:bg-red-700 hover:cursor-pointer py-2 px-6 "
                       >
                         Close
@@ -97,6 +154,7 @@ const AddUser = () => {
           </div>
         </Dialog>
       </Transition>
+      <UserList user={responseUser} />
     </>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import User from "./User"
 
-const UserList = () => {
+const UserList = ({ user }) => {
   const USER_API_BASE_URL = "http://localhost:8080/api/v1/users"
   const [users, setUsers] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -24,7 +24,7 @@ const UserList = () => {
       setLoading(false)
     }
     fetchData()
-  }, [])
+  }, [user])
 
   return (
     <div className="container mx-auto my-8">
