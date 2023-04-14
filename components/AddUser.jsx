@@ -11,6 +11,7 @@ const AddUser = () => {
     lastName: "",
     emailId: "",
   })
+  
   const [responseUser, setResponseUser] = useState({
     id: "",
     firstName: "",
@@ -47,10 +48,11 @@ const AddUser = () => {
 
     const _user = await response.json()
     setResponseUser(_user)
-    reset()
+    reset(e)
   }
 
-  const reset = () => {
+  const reset = (e) => {
+    e.preventDefault()
     setUser({
       id: "",
       firstName: "",
@@ -104,7 +106,7 @@ const AddUser = () => {
                       <input
                         type="text"
                         name="firstName"
-                        value={user.firsName}
+                        value={user.firstName}
                         onChange={(e) => handleChange(e)}
                         className="h-10 w-96 border mt-2 px-2 py-2"
                       />
